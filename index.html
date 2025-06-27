@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Foto hinzufügen</title>
+    <title>Foto hinzufügen & E-Mail senden</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -20,6 +20,9 @@
             padding: 10px 20px;
             font-size: 16px;
             margin-top: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
         input[type="file"] {
             display: none;
@@ -28,16 +31,21 @@
 </head>
 <body>
 
-    <h1>Foto hinzufügen</h1>
+    <h1>Foto hinzufügen & E-Mail senden</h1>
+    
     <button onclick="document.getElementById('fileInput').click();">Foto auswählen</button>
     <input type="file" id="fileInput" accept="image/*" capture="environment">
+    
     <div>
         <img id="preview" src="" alt="Dein Foto wird hier angezeigt">
     </div>
 
+    <button id="sendEmailBtn" style="display:none;">Foto per E-Mail senden</button>
+
     <script>
         const fileInput = document.getElementById('fileInput');
         const preview = document.getElementById('preview');
+        const sendEmailBtn = document.getElementById('sendEmailBtn');
 
         fileInput.addEventListener('change', function() {
             const file = fileInput.files[0];
@@ -45,9 +53,17 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     preview.src = e.target.result;
+                    sendEmailBtn.style.display = 'block';
                 }
                 reader.readAsDataURL(file);
             }
+        });
+
+        sendEmailBtn.addEventListener('click', function() {
+            const recipient = "deine@emailadresse.de";
+            const subject = encodeURIComponent("Foto als Anhang");
+            const body = encodeURIComponent("Hallo,\n\nim Anhang findest du das gewünschte Foto. Bitte füge das Foto manuell als Anhang hinzu.\n\nViele Grüße");
+            window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
         });
     </script>
 
